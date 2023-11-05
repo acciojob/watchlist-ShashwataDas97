@@ -2,9 +2,7 @@ package com.driver;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class MovieRepository {
@@ -63,24 +61,24 @@ public class MovieRepository {
     }
 
     public void deleteDirectorByName(String name) {
-        for(Movie m : movieDirector.keySet()){
-            if((movieDirector.get(m).getName()).equals(name)){
-                movieList.remove(m.getName());
-                movieDirector.remove(m);
+        directorList.remove(name);
+        Iterator<Map.Entry<Movie, Director>> itr = movieDirector.entrySet().iterator();
+        while(itr.hasNext()){
+            Map.Entry<Movie, Director> entry = itr.next();
+            if(entry.getValue().getName().equals(name)){
+                movieList.remove(entry.getKey().getName());
+                itr.remove();
             }
         }
-        directorList.remove(name);
     }
 
     public void deleteAllDirectors() {
-        for(String dName : directorList.keySet()) {
-            for(Movie m : movieDirector.keySet()) {
-                if((movieDirector.get(m).getName()).equals(dName)){
-                    movieList.remove(m.getName());
-                    movieDirector.remove(m);
-                }
-            }
-            directorList.remove(dName);
+        Iterator<Map.Entry<Movie, Director>> itr = movieDirector.entrySet().iterator();
+        while(itr.hasNext()){
+            Map.Entry<Movie, Director> entry = itr.next();
+            directorList.remove(entry.getValue().getName());
+            movieList.remove(entry.getKey().getName());
+            itr.remove();
         }
     }
 }
